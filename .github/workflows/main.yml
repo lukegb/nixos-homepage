@@ -7,6 +7,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[CI Skip]')"
     steps:
     - name: Checking out the repository
       uses: actions/checkout@v2
@@ -17,7 +18,7 @@ jobs:
     - name: Update content
       run: ./update.sh
     - name: Building nixos.org
-      run: nix-build && mkdir build && cp -RL ./result/* ./build/
+      run: nix build && mkdir build && cp -RL ./result/* ./build/
     - name: Deploy to Netlify
       uses: nwtgck/actions-netlify@v1.0.5
       env:
@@ -29,3 +30,11 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         deploy-message: 'Deploy from GitHub Actions'
       if: github.repository == 'NixOS/nixos-homepage'
+    - name: Commit flake.lock and push to master branch
+      uses: github-actions-x/commit@v2.5
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        push-branch: 'test'
+        commit-message: 'Update flake.lock [CI Skip]'
+        force-add: 'true'
+        files: flake.lock

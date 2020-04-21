@@ -3,8 +3,9 @@ on:
   schedule:
   - cron: '0 * * * *'
 jobs:
-  build-and-deploy:
+  hourly-build-and-deploy:
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[CI Skip]')"
     steps:
     - name: Checking out the repository
       uses: actions/checkout@v2
