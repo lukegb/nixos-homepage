@@ -15,10 +15,6 @@ jobs:
         fetch-depth: 0
     - name: Installing Nix
       uses: cachix/install-nix-action@v8
-    - name: Installing NixFlakes
-      run: nix-env -iA nixpkgs.nixFlakes
-    - name: Enable Nix Flakes
-      run: echo 'experimental-features = nix-command flakes' | sudo tee -a /etc/nix/nix.conf && cat /etc/nix/nix.conf
     - name: Update content
       run: ./update.sh
     - name: Building nixos.org
