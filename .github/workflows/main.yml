@@ -22,7 +22,7 @@ jobs:
     - name: Update content
       run: ./update.sh
     - name: Building nixos.org
-      run: nix-build && mkdir build && cp -RL ./result/* ./build/
+      run: nix build && mkdir build && cp -RL ./result/* ./build/
     - name: Deploy to Netlify
       uses: nwtgck/actions-netlify@v1.0.5
       env:
